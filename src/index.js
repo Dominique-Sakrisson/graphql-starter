@@ -27,13 +27,37 @@ const resolvers = {
     Query: {
         info: () => `This is the API of a Hackernews Clone`,
         feed: () => links,
+        link: (parent, args) => {
+         for(const item of links){
+            if(item.id === args.id){
+              console.log('found a match');
+              return item
+            } 
+          }
+          // return 'no link of that id';
+        },
       },
-      Link : {
-        id: (parent) => parent.id,
-        description: (parent) => parent.description,
-        url: (parent) => parent.url,
-        play: (parent) => parent.play
-      }
+      Mutation:{
+        post: (parent, args)=>{
+         let idCount = links.length;
+          const link ={
+            id: `link-${idCount++}`,
+            description: args.description,
+            url: args.url,
+          }
+          links.push(link);
+          return link;
+        },
+        updateLink: (parent, args) => {
+          const link ={
+            id: `link-${args.id}`,
+            description: args.description,
+            url: args.url,
+          }
+          return link;
+        }
+        
+      },
 }
 
 //passed in the bundled schema and resolvers 
