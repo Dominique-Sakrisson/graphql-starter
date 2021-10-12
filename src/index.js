@@ -1,25 +1,12 @@
 const {  ApolloServer }= require('apollo-server');
-const { ApolloServerPluginCacheControl } = require('apollo-server-core');
+const fs = require('fs');
+const path = require('path');
+
 
 //graphql schema 
 //has one query type that has the value String 
 //string can never be null
-const typeDefs =`
-    type Query {
-        info: String!
-        feed: [Link!]!
-      }
 
-      type Mutation {
-        post(url: String!, description: String!): Link!
-      }
-      type Link {
-        id: ID!
-        description: String!
-        url: String!
-        play: String
-      }
-`
 
 const links = [{
   id: 'link-0',
@@ -53,8 +40,11 @@ const resolvers = {
 //tells the API what operations are accepted 
 //and how to resolve them
 const server = new ApolloServer({
-    typeDefs,
-    resolvers
+    typeDefs: fs.readFileSync(
+      path.join(__dirname, 'schema.graphql'),
+      'utf8'
+    ),
+    resolvers,
 })
 
 server
