@@ -27,7 +27,7 @@ const resolvers = {
     Query: {
         info: () => `This is the API of a Hackernews Clone`,
         feed: () => links,
-        link: (parent, args) => {
+        linkById: (args) => {
          for(const item of links){
             if(item.id === args.id){
               console.log('found a match');
@@ -55,6 +55,14 @@ const resolvers = {
             url: args.url,
           }
           return link;
+        },
+        deleteLink: (parent, args) => {
+          links.map((item, index) => {
+            if(item.id === args.id){
+              links.slice(links[index -1], links[index ] );  
+            }
+          })
+          return links;
         }
         
       },
